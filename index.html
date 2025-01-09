@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Rate Converter</title>
+    <style>
+        /* General Styles */
+        body {
+              font-family: 'Arial', sans-serif;
+             margin: 0;
+             padding: 0;
+             background: #cccccc;
+             color: #333;
+             display: flex;
+             flex-direction: column;
+             min-height: 100vh;
+            }
+        header {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            flex: 5; 
+        }
+        .converter {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #a6a6a6;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #1c0511;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 5px 0;
+            margin-top: bottom; /* Push footer to the bottom */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .converter {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Currency Converter</h1>
+    </header>
+    <main>
+        <section class="converter">
+            <div class="form-group">
+                <label for="fromCurrency">From:</label>
+                <select id="fromCurrency"></select>
+            </div>
+            <div class="form-group">
+                <label for="toCurrency">To:</label>
+                <select id="toCurrency"></select>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" placeholder="Enter amount" />
+            </div>
+            <button id="convert">Convert</button>
+            <div class="result" id="result"></div>
+        </section>
+    </main>
+    <footer>
+        <p>Exchange Rate Converter © 2025 Zeyad Gaber | All Rights Reserved</p>
+    </footer>
+    <script>
+        const fromCurrency = document.getElementById('fromCurrency');
+        const toCurrency = document.getElementById('toCurrency');
+        const amount = document.getElementById('amount');
+        const convertButton = document.getElementById('convert');
+        const resultDiv = document.getElementById('result');
+
+        const apiKey = '67f259e01c8e29c026c17c40e211bdc1'; // Replace with your API key
+        const apiUrl = `https://api.exchangerate-api.com/v4/latest/`; // Example API endpoint
+
+        // Populate currency dropdowns
+        async function populateCurrencies() {
+            try {
+                const response = await fetch(apiUrl + 'USD'); // Fetching rates based on USD
+                const data = await response.json();
+                const currencies = Object.keys(data.rates);
+
+                currencies.forEach(currency => {
+                    const option1 = document.createElement('option');
+                    const option2 = document.createElement('option');
+                    option1.value = option2.value = currency;
+                    option1.textContent = option2.textContent = currency;
+
+                    fromCurrency.appendChild(option1);
+                    toCurrency.appendChild(option2);
+                });
+
+                // Set default values
+                fromCurrency.value = 'USD';
+                toCurrency.value = 'EUR';
+            } catch (error) {
+                resultDiv.textContent = 'Error loading currencies. Please try again later.';
+            }
+        }
+
+        // Perform conversion
+        async function convertCurrency() {
+            const from = fromCurrency.value;
+            const to = toCurrency.value;
+            const amountValue = parseFloat(amount.value);
+
+            if (!amountValue || amountValue <= 0) {
+                resultDiv.textContent = 'Please enter a valid amount.';
+                return;
+            }
+
+            try {
+                const response = await fetch(apiUrl + from);
+                const data = await response.json();
+                const rate = data.rates[to];
+                const convertedAmount = (amountValue * rate).toFixed(2);
+
+                resultDiv.textContent = `${amountValue} ${from} = ${convertedAmount} ${to}`;
+            } catch (error) {
+                resultDiv.textContent = 'Error performing conversion. Please try again later.';
+            }
+        }
+
+        // Event listeners
+        convertButton.addEventListener('click', convertCurrency);
+
+        // Initialize
+        populateCurrencies();
+    </script>
+</body>
+</html>
