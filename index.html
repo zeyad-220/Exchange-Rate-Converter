@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Rate Converter</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e8c476' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h13l-3-3'/%3E%3Cpath d='M20 17H7l3 3'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="aurora" aria-hidden="true">
+        <div class="blob blob-a"></div>
+        <div class="blob blob-b"></div>
+        <div class="grain"></div>
+    </div>
+
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track" id="tickerTrack">
+            <span class="ticker-item muted">Loading live rates&hellip;</span>
+        </div>
+    </div>
+
+    <main class="stage">
+        <header class="brand">
+            <div class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 7h13l-3-3"/><path d="M20 17H7l3 3"/>
+                </svg>
+            </div>
+            <p class="eyebrow">Exchange Rate Converter</p>
+            <h1>Any currency.<br><span class="accent">Today&#39;s rate.</span></h1>
+        </header>
+
+        <section class="converter" aria-label="Currency converter">
+            <div class="panel panel-from">
+                <div class="panel-head">
+                    <label for="amount">You convert</label>
+                    <select id="fromCurrency" aria-label="From currency"></select>
+                </div>
+                <div class="panel-body">
+                    <input type="number" id="amount" min="0" step="any" value="100" inputmode="decimal" aria-label="Amount to convert">
+                </div>
+            </div>
+
+            <button class="swap" id="swap" aria-label="Swap currencies" title="Swap currencies">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 4v13l-3-3"/><path d="M17 20V7l3 3"/>
+                </svg>
+            </button>
+
+            <div class="panel panel-to">
+                <div class="panel-head">
+                    <label for="resultValue">They get</label>
+                    <select id="toCurrency" aria-label="To currency"></select>
+                </div>
+                <div class="panel-body">
+                    <span class="result-value" id="resultValue">&mdash;</span>
+                </div>
+            </div>
+
+            <div class="meta">
+                <p class="rate-line" id="rateLine">Fetching live rates&hellip;</p>
+                <p class="updated" id="updatedLine"></p>
+            </div>
+        </section>
+
+        <p class="hint">Converts as you type &middot; indicative rates, refreshed daily.</p>
+    </main>
+
+    <footer>
+        <p>Exchange Rate Converter &copy; 2025 Zeyad Gaber | All Rights Reserved</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
